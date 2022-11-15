@@ -8,10 +8,10 @@ spring:
   cloud:
     gateway:
       routes:
-        #- id: customer
-         # uri: lb://CUSTOMER
-          #predicates:
-           # - Path=/api/v1/customers/**
+        - id: settings-api
+          uri: lb://SETTINGS-API
+          predicates:
+            - Path=/api/v1/settings/**
   main:
     web-application-type: reactive
 
