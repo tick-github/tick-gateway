@@ -22,6 +22,11 @@ public class JwtUtility {
 
     private static final String GOOGLE_JWK_URI = "https://www.googleapis.com/oauth2/v3/certs";
 
+    /**
+     * A method to get all the claims coded into a JWT.
+     * @param token The encoded JWT to retrieve the claims from.
+     * @return The claims if there are any. If the token is invalid, returns an empty map.
+     */
     public static Map<String, Claim> getClaims(String token) {
 
         try {
@@ -33,12 +38,18 @@ public class JwtUtility {
 
     }
 
-    public static boolean verify(String token) {
+    /**
+     * A method to verify a given JWT using the given JWK url. Requires an internet connection.
+     * @param token The JWT to verify.
+     * @param jwkLocationUrl The url that has the information of the public JWK.
+     * @return A boolean representing if the given JWT is valid or not.
+     */
+    public static boolean verify(String token, String jwkLocationUrl) {
 
         try {
             // Signature Verification
             DecodedJWT jwt = JWT.decode(token);
-            JwkProvider provider = new UrlJwkProvider(GOOGLE_JWK_URI);
+            JwkProvider provider = new UrlJwkProvider(jwkLocationUrl);
             Jwk jwk = provider.get(jwt.getKeyId());
             Algorithm algorithm = Algorithm.RSA256((RSAPublicKey) jwk.getPublicKey(), null);
             algorithm.verify(jwt);
@@ -51,6 +62,7 @@ public class JwtUtility {
         }
 
         return true;
+
     }
 
 }
