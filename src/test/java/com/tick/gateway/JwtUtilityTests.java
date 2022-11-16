@@ -27,4 +27,18 @@ public class JwtUtilityTests {
 
     }
 
+    @Test
+    public void getClaims_WithInvalidToken_ReturnsEmptyMap() {
+
+        // Arrange
+        final String testJwt = "bad token";
+
+        // Act
+        var result = JwtUtility.getClaims(testJwt);
+
+        // Assert
+        Assertions.assertTrue(result.isEmpty());
+
+    }
+
 }
