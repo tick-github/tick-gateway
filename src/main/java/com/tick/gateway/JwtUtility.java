@@ -13,6 +13,8 @@ import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import org.springframework.stereotype.Component;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.security.interfaces.RSAPublicKey;
 import java.util.Collections;
 import java.util.Map;
@@ -27,7 +29,7 @@ public class JwtUtility {
      * @param token The encoded JWT to retrieve the claims from.
      * @return The claims if there are any. If the token is invalid, returns an empty map.
      */
-    public static Map<String, Claim> getClaims(String token) {
+    public Map<String, Claim> getClaims(String token) {
 
         try {
             DecodedJWT jwt = JWT.decode(token);
@@ -44,12 +46,12 @@ public class JwtUtility {
      * @param jwkLocationUrl The url that has the information of the public JWK.
      * @return A boolean representing if the given JWT is valid or not.
      */
-    public static boolean verify(String token, String jwkLocationUrl) {
+    public boolean verify(String token, String jwkLocationUrl) {
 
         try {
             // Signature Verification
             DecodedJWT jwt = JWT.decode(token);
-            JwkProvider provider = new UrlJwkProvider(jwkLocationUrl);
+            JwkProvider provider = new UrlJwkProvider(new URL(jwkLocationUrl));
             Jwk jwk = provider.get(jwt.getKeyId());
             Algorithm algorithm = Algorithm.RSA256((RSAPublicKey) jwk.getPublicKey(), null);
             algorithm.verify(jwt);
@@ -57,7 +59,7 @@ public class JwtUtility {
             // Expiration Verification
             JWTVerifier verifier = JWT.require(algorithm).build();
             verifier.verify(token);
-        } catch (JwkException | JWTVerificationException e) {
+        } catch (MalformedURLException | JwkException | JWTVerificationException e) {
             return false;
         }
 

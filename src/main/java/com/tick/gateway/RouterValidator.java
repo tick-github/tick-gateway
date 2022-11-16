@@ -1,6 +1,6 @@
 package com.tick.gateway;
 
-import org.springframework.http.server.ServerHttpRequest;
+import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -13,7 +13,7 @@ public class RouterValidator {
     // for the below implementation.
 
     public static final List<String> openApiEndpoints = List.of(
-            "api/v1/settings/ping"
+            "/api/v1/settings/ping"
     );
 
     public Predicate<ServerHttpRequest> isSecured =
