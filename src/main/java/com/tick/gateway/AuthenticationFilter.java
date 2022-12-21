@@ -76,7 +76,7 @@ public class AuthenticationFilter implements GatewayFilter {
 
         Map<String, Claim> claims = jwtUtility.getClaims(token);
         exchange.getRequest().mutate()
-                .header("id", String.valueOf(claims.get("sub")))
+                .header("id", String.valueOf(claims.get("sub")).replaceAll("\"", ""))
                 .header("name", String.valueOf(claims.get("given_name")))
                 .build();
 
